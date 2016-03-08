@@ -1,8 +1,9 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Pauser.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/PlaneControl.cs">
     <Files>
-      <File FileName="Assets/Pauser.cs" Line="24" Column="2" />
+      <File FileName="Assets/Scripts/PlaneControl.cs" Line="161" Column="18" />
+      <File FileName="Assets/Scripts/Pauser.cs" Line="22" Column="4" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
