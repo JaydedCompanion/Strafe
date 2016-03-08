@@ -9,7 +9,7 @@ public class CameraTracker : MonoBehaviour {
 
 	private Transform TargetTrans;
 	private FlightState PlayerState;
-	public float MixFac;
+	private float MixFac;
 
 	// Use this for initialization
 	void Start () {
