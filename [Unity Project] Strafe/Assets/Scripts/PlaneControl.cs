@@ -27,10 +27,12 @@ public class PlaneControl : MonoBehaviour {
 
 	public bool useTouch;
 	public bool Powered;
+	[Range (-1, 1)] public float Steer;
 
 	[Range (10, 1000)] public float PullUpPower;
 	[Range (1, 100)] public float TakeOffSpeed;
 	[Range (1, 100)] public float Speed;
+	[Range (1, 100)] public float SteerPower;
 	[Range (1, 5)] public int ZToYInfluence;
 	public float MaxHeight;
 	public float MinHeight;
@@ -87,6 +89,8 @@ public class PlaneControl : MonoBehaviour {
 
 			}
 
+			Steer = Mathf.Clamp (Input.gyro.attitude.z * 5, -1, 1);
+
 		} else {
 
 			if (Input.GetKeyDown(KeyCode.Space)){
@@ -98,6 +102,8 @@ public class PlaneControl : MonoBehaviour {
 				Powered = false;
 
 			}
+
+			Steer = Input.GetAxis("Horizontal");
 
 		}
 
@@ -178,13 +184,32 @@ public class PlaneControl : MonoBehaviour {
 
 				}
 
+				//Use the "Steer" var to tell the plane what direction to go in (and animate accordingly)
+
+				RB.AddForce(Vector3.right * Steer * SteerPower);
+
+				int DCount = 0;
+
+				while (DCount < transform.GetChild(0).childCount) {
+
+					if (transform.GetChild(0).GetChild(DCount).name == "Z Pivot") {
+
+						transform.GetChild(0).GetChild(DCount).GetComponent<Animator>().SetFloat("Steer", RB.velocity.x/5);
+
+					}
+
+					DCount++;
+
+				}
+
 			}
 
 			if (State == FlightState.Crash) {
 
-				//Stop the plane completely if it crashes
+				//Stop the plane completely if it crashes, and disable the RigidBody component (make it kinematic);
 
 				RB.velocity = Vector3.zero;
+				RB.isKinematic = true;
 
 			}
 
