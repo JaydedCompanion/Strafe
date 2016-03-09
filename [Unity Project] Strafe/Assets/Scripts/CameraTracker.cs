@@ -34,7 +34,7 @@ public class CameraTracker : MonoBehaviour {
 			
 			if (isActive) {
 
-				transform.position = new Vector3 (transform.position.x, transform.position.y, Mathf.Lerp(transform.position.z, TargetTrans.position.z, 0.25f));
+				transform.position = new Vector3 (Mathf.Lerp(transform.position.x, TargetTrans.position.x, 0.01f), transform.position.y, Mathf.Lerp(transform.position.z, TargetTrans.position.z, 0.05f));
 
 				if (HandleGroundedAnim) {
 

@@ -21,7 +21,8 @@ public enum FlightState {
 
 public class PlaneControl : MonoBehaviour {
 
-	public bool Debug_MaxHeight;
+	public bool DebugMaxHeight;
+	public bool DebugMaxSteer;
 
 	public FlightState State;
 
@@ -34,8 +35,10 @@ public class PlaneControl : MonoBehaviour {
 	[Range (1, 100)] public float Speed;
 	[Range (1, 100)] public float SteerPower;
 	[Range (1, 5)] public int ZToYInfluence;
+
 	public float MaxHeight;
 	public float MinHeight;
+	public float LateralMax;
 
 	public Motorize Porpeller;
 
@@ -69,9 +72,23 @@ public class PlaneControl : MonoBehaviour {
 
 		//Debug selected options
 
-		if (Debug_MaxHeight) {
+		if (DebugMaxHeight) {
 
-			Debug.DrawLine (new Vector3 (0, MaxHeight, 0), new Vector3 (0, MaxHeight, 5), Color.blue, 500);
+			Debug.DrawLine (new Vector3 (5, MaxHeight, transform.position.z), new Vector3 (-5, MaxHeight, transform.position.z), Color.green);
+
+		}
+
+		if (DebugMaxSteer) {
+
+			Debug.DrawLine (new Vector3 (LateralMax, transform.position.y, transform.position.z - 1), 
+				new Vector3 (LateralMax, transform.position.y, transform.position.z + 1), Color.red);
+			
+			Debug.DrawLine (new Vector3 (LateralMax, 1, transform.position.z - 5), new Vector3 (LateralMax, 1, transform.position.z + 5), Color.red);
+
+			Debug.DrawLine (new Vector3 (-LateralMax, transform.position.y, transform.position.z - 1), 
+				new Vector3 (-LateralMax, transform.position.y, transform.position.z + 1), Color.red);
+			
+			Debug.DrawLine (new Vector3 (-LateralMax, 1, transform.position.z - 5), new Vector3 (-LateralMax, 1, transform.position.z + 5), Color.red);
 
 		}
 
@@ -98,7 +115,7 @@ public class PlaneControl : MonoBehaviour {
 				Powered = true;
 
 			} else if (Input.GetKeyUp(KeyCode.Space)){
-
+				 	
 				Powered = false;
 
 			}
@@ -107,6 +124,15 @@ public class PlaneControl : MonoBehaviour {
 
 		}
 
+		if (transform.position.x >= LateralMax) {
+
+			Steer = Mathf.Clamp(Steer, -1, LateralMax - transform.position.x);
+
+		} else if (transform.position.x <= -LateralMax) {
+			
+			Steer = Mathf.Clamp(Steer, -LateralMax - transform.position.x, 1);
+
+		}
 		//Finish Detecting Controls
 
 		//--------------------//--------------------//
