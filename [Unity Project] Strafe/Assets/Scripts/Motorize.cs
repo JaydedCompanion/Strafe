@@ -1,4 +1,11 @@
-﻿using UnityEngine;
+﻿/*
+ * 
+ * Apply this script to an object that you want to be rotated by an axis.
+ * The main use of this script if for the porpeller on the fron to the plane
+ * 
+ */
+
+using UnityEngine;
 using System.Collections;
 
 public enum Dir {

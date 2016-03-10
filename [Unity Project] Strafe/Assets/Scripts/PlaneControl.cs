@@ -28,6 +28,8 @@ public class PlaneControl : MonoBehaviour {
 
 	public bool useTouch;
 	public bool Powered;
+	private bool changedPower;
+	private bool onPower;
 	[Range (-1, 1)] public float Steer;
 
 	[Range (10, 1000)] public float PullUpPower;
@@ -43,7 +45,9 @@ public class PlaneControl : MonoBehaviour {
 	public Motorize Porpeller;
 
 	private bool DrawControlUI;
+	private bool ControlSwitch = false;
 	private Rigidbody RB;
+	public Vector3 CurrentSpeed;
 
 	// Use this for initialization
 	void Start () {
@@ -100,9 +104,25 @@ public class PlaneControl : MonoBehaviour {
 				
 				Powered = true;
 
+				if (changedPower == false) {
+
+					changedPower = true;
+
+					onPower = true;
+
+				} else {
+
+					onPower = false;
+
+				}
+
 			} else {
 
 				Powered = false;
+
+				changedPower = false;
+
+				onPower = false;
 
 			}
 
@@ -110,13 +130,29 @@ public class PlaneControl : MonoBehaviour {
 
 		} else {
 
-			if (Input.GetKeyDown(KeyCode.Space)){
+			if (Input.GetKey(KeyCode.Space)){
 
 				Powered = true;
+
+				if (changedPower == false) {
+
+					changedPower = true;
+
+					onPower = true;
+
+				} else {
+
+					onPower = false;
+
+				}
 
 			} else if (Input.GetKeyUp(KeyCode.Space)){
 				 	
 				Powered = false;
+
+				changedPower = false;
+
+				onPower = false;
 
 			}
 
@@ -133,6 +169,13 @@ public class PlaneControl : MonoBehaviour {
 			Steer = Mathf.Clamp(Steer, -LateralMax - transform.position.x, 1);
 
 		}
+
+		if (onPower) {
+
+			Debug.LogWarning("Power on (One-Off)");
+
+		}
+
 		//Finish Detecting Controls
 
 		//--------------------//--------------------//
@@ -177,13 +220,29 @@ public class PlaneControl : MonoBehaviour {
 
 			//Use "Power" as Z (forward) velocity, which then gets converted to Y force, to add a more realistic take-off speed
 
-			if (Powered && State == FlightState.Starting || Powered && State == FlightState.Idle) {
+			if (State == FlightState.Starting || State == FlightState.Idle) {
+
+				//Calculate force to apply
+
+				if (Powered){
+
+					CurrentSpeed = Vector3.forward * TakeOffSpeed * (Time.deltaTime*35);
+
+				} else {
+
+					CurrentSpeed = Vector3.forward * Mathf.Lerp(CurrentSpeed.z, 0, 0.0025f);
+
+				}
 
 				//Add forwards force
-				RB.AddForce (transform.forward * TakeOffSpeed * (Time.deltaTime*35));
+				RB.AddForce (CurrentSpeed);
 
-				//Convert Z-Speed to Elevation force (Y Axis).
-				RB.AddForce (Vector3.up * RB.velocity.z * ((MaxHeight + 5) - transform.position.y) * ZToYInfluence);
+				if (Powered){
+
+					//Convert Z-Speed to Elevation force (Y Axis).
+					RB.AddForce (Vector3.up * RB.velocity.z * ((MaxHeight + 5) - transform.position.y) * ZToYInfluence);
+
+				}
 
 			}
 
@@ -191,11 +250,19 @@ public class PlaneControl : MonoBehaviour {
 
 			if (State == FlightState.Game){
 
+				//UX Manager for when control scheme changes
+
+				if (Powered && onPower){
+
+					ControlSwitch = true;
+
+				}
+
 				//Maintain the plane at a constant Z-Speed. Lerp the value for a smooth transition in case the previous speed (from taking off) is dramatically different
 
 				RB.velocity = new Vector3 (RB.velocity.x, RB.velocity.y, Mathf.Lerp (RB.velocity.z, Speed, 0.1f));
 
-				if (Powered){
+				if (Powered && ControlSwitch){
 
 					//Add pullup force downwards (Change variable name in the future)
 					RB.AddForce(-Vector3.up * PullUpPower * (Time.deltaTime*35));

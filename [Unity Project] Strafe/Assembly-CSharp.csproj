@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\CameraTracker.cs" />
+     <Compile Include="Assets\Scripts\EnvirnomentObject.cs" />
      <Compile Include="Assets\Scripts\EnvironmentSpawner.cs" />
      <Compile Include="Assets\Scripts\Motorize.cs" />
      <Compile Include="Assets\Scripts\Pauser.cs" />
