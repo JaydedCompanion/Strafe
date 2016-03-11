@@ -1,11 +1,14 @@
 
 *.meta
 
-[Unity Project] Strafe/[Ll]ibrary/
+[Unity Project] Strafe/Library/
+[Unity Project] Strage/library/
 
-[Unity Project] Strafe/[Oo]bj/
+[Unity Project] Strafe/Obj/
+[Unity Project] Strafe/obj/
 
-[Unity Project] Strafe/[Tt]emp/ 
+[Unity Project] Strafe/Temp/
+[Unity Project] Strafe/temp/ 
 
 *.meta
 
