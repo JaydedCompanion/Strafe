@@ -1,0 +1,14 @@
+
+*.meta
+
+[Unity Project] Strafe/[Ll]ibrary/
+
+[Unity Project] Strafe/[Oo]bj/
+
+[Unity Project] Strafe/[Tt]emp/ 
+
+*.meta
+
+*.blend1
+
+*.unitypackage
